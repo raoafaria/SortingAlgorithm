@@ -4,6 +4,7 @@ import random
 import psutil
 import platform
 
+
 # Insertion Sort Implementation
 def insertion_sort(arr):
     for i in range(1, len(arr)):
@@ -14,6 +15,7 @@ def insertion_sort(arr):
             j -= 1
         arr[j + 1] = key
 
+
 # Selection Sort Implementation
 def selection_sort(arr):
     for i in range(len(arr)):
@@ -23,6 +25,7 @@ def selection_sort(arr):
                 min_idx = j
         arr[i], arr[min_idx] = arr[min_idx], arr[i]
 
+
 # Bubble Sort Implementation
 def bubble_sort(arr):
     n = len(arr)
@@ -31,45 +34,29 @@ def bubble_sort(arr):
             if arr[j] > arr[j + 1]:
                 arr[j], arr[j + 1] = arr[j + 1], arr[j]
 
-# Function to benchmark sorting algorithms
-def benchmark_sorting_algorithms():
+
+# Benchmark a specific sorting algorithm
+def benchmark_algorithm(algorithm_name, sorting_function):
     input_sizes = [5, 10, 20, 50, 100, 500, 1000, 5000, 10000]
-    insertion_times = []
-    selection_times = []
-    bubble_times = []
+    times = []
 
     for size in input_sizes:
         test_array = [random.randint(1, 10000) for _ in range(size)]
-
-        # Time Insertion Sort
         start_time = time.time()
-        insertion_sort(test_array.copy())
+        sorting_function(test_array)
         end_time = time.time()
-        insertion_times.append(end_time - start_time)
+        times.append(end_time - start_time)
 
-        # Time Selection Sort
-        start_time = time.time()
-        selection_sort(test_array.copy())
-        end_time = time.time()
-        selection_times.append(end_time - start_time)
-
-        # Time Bubble Sort
-        start_time = time.time()
-        bubble_sort(test_array.copy())
-        end_time = time.time()
-        bubble_times.append(end_time - start_time)
-
-    # Plot results
+    # Plot the result
     plt.figure(figsize=(10, 6))
-    plt.plot(input_sizes, insertion_times, label='Insertion Sort', marker='o')
-    plt.plot(input_sizes, selection_times, label='Selection Sort', marker='o')
-    plt.plot(input_sizes, bubble_times, label='Bubble Sort', marker='o')
+    plt.plot(input_sizes, times, label=algorithm_name, marker='o')
     plt.xlabel('Input Size (n)')
     plt.ylabel('Time (seconds)')
-    plt.title('Sorting Algorithm Runtime Comparison')
+    plt.title(f'{algorithm_name} Runtime Performance')
     plt.legend()
     plt.grid()
     plt.show()
+
 
 # Function to display system information
 def display_system_info():
@@ -81,6 +68,37 @@ def display_system_info():
     print(f"Total RAM: {round(psutil.virtual_memory().total / (1024 * 1024 * 1024), 2)} GB")
     print("\n")
 
+
+# Main Menu
+def main_menu():
+    while True:
+        print("Sorting Algorithms Benchmark")
+        print("1. Benchmark Insertion Sort")
+        print("2. Benchmark Selection Sort")
+        print("3. Benchmark Bubble Sort")
+        print("4. Display System Information")
+        print("5. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            print("\nBenchmarking Insertion Sort...\n")
+            benchmark_algorithm("Insertion Sort", insertion_sort)
+        elif choice == "2":
+            print("\nBenchmarking Selection Sort...\n")
+            benchmark_algorithm("Selection Sort", selection_sort)
+        elif choice == "3":
+            print("\nBenchmarking Bubble Sort...\n")
+            benchmark_algorithm("Bubble Sort", bubble_sort)
+        elif choice == "4":
+            print("\nDisplaying System Information...\n")
+            display_system_info()
+        elif choice == "5":
+            print("\nExiting. Goodbye!")
+            break
+        else:
+            print("\nInvalid choice. Please try again.\n")
+
+
 if __name__ == "__main__":
-    display_system_info()
-    benchmark_sorting_algorithms()
+    main_menu()
